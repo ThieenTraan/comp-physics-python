@@ -16,16 +16,19 @@ t0 = 0
 tn = 1
 h = 0.5
 
-func = []
-# func.append(lambda y1,y2: y1 + 2*y2)
-# func.append(lambda y1,y2: 3*y1 + 2*y2)
-func.append(lambda y1,y2: -0.5*y1)
-func.append(lambda y1,y2: 4 - 0.1*y1 - 0.3*y2)
+f = []
+# func.append(lambda t,y1,y2: y1 + 2*y2)
+# func.append(lambda t,y1,y2: 3*y1 + 2*y2)
+# function type f(t,y0,y1,...,yn)
+f.append(lambda *args: -0.5*args[1])
+f.append(lambda *args: 4 - 0.1*args[1] - 0.3*args[2])
 
 n = int((tn - t0)/h)
 t = numpy.arange(t0, tn+h, h)
-y1 = [4]
-y2 = [6]
+y = []
+y.append([4])
+y.append([6])
+
 print(t)
 print(n)
 
@@ -51,18 +54,24 @@ print(n)
 # f = func[eq]
 # y = [init_val[eq]]
 for i in range(n):
-	k1 = h*func[0](y1[i], y2[i])
-	l1 = h*func[1](y1[i], y2[i])
-	k2 = h*func[0](y1[i] + k1/2, y2[i] + l1/2)
-	l2 = h*func[1](y1[i] + k1/2, y2[i] + l1/2)
-	k3 = h*func[0](y1[i] + k2/2, y2[i] + l2/2)
-	l3 = h*func[1](y1[i] + k2/2, y2[i] + l2/2)
-	k4 = h*func[0](y1[i] + k3, y2[i] + l3)
-	l4 = h*func[1](y1[i] + k3, y2[i] + l3)
-	y1.append(y1[i] + 1/6*(k1 + 2*k2 + 2*k3 + k4))
-	y2.append(y2[i] + 1/6*(k1 + 2*k2 + 2*k3 + k4))
-	print(k1,k2,k3,k4)
-	print(l1,l2,l3,l4)
-print(y1)
-print(y2)
+	k1 = []
+	k2 = []
+	k3 = []
+	k4 = []
+	for j in range(2):
+		arg = [t[i], y[0][i], y[1][i]]
+		# k1.append(h*f[j](t[i], y[0][i], y[1][i]))
+		k1.append(h*f[j](*arg))
+	for j in range(2):
+		k2.append(h*f[0](t[i] + h/2, y[0][i] + k1[0]/2, y[1][i] + k1[1]/2))
+	for j in range(2):
+		k3.append(h*f[j](t[i] + h/2, y[0][i] + k2[0]/2, y[1][i] + k2[1]/2))
+	for j in range(2):
+		k4.append(h*f[j](t[i] + h, y[0][i] + k3[0], y[1][i] + k3[1]))
+	y[0].append(y[0][i] + 1/6*(k1[0] + 2*k2[0] + 2*k3[0] + k4[0]))
+	y[1].append(y[1][i] + 1/6*(k1[1] + 2*k2[1] + 2*k3[1] + k4[1]))
+
+print(y[0])
+print(y[1])
+
 # def export_result():
