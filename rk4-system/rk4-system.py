@@ -11,7 +11,7 @@ result_file = "result.txt"
 # coeff_val = []
 
 t0 = 0
-tn = 1
+tn = 5
 h = 0.25
 
 f = []
@@ -80,6 +80,7 @@ for i in range(n):
 
 for i in range(eq_num):
 	print(*y[i], sep="\t")
+
 def export_result():
 	f = open("result-file.txt", "w")
 	line = ""
