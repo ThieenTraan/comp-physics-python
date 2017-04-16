@@ -49,6 +49,7 @@ def export_result():
 		line = line + "\n"
 	f.write(line)
 	f.close()
+	print('Operation successful! Checkout {0} for result!'.format(result_file))
 
 def solve_system():	
 	# print(eq_num)
